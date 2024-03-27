@@ -11,6 +11,8 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema database_Go
 -- -----------------------------------------------------
+CREATE USER 'root'@'localhost' IDENTIFIED BY '1234';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';
 CREATE SCHEMA IF NOT EXISTS `database_Go` DEFAULT CHARACTER SET utf8mb3 ;
 USE `database_Go` ;
 

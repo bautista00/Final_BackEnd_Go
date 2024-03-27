@@ -3,7 +3,8 @@ package db
 import (
 	"database/sql"
 	"fmt"
-	"github.com/go-sql-driver/mysql"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 var (
@@ -11,7 +12,8 @@ var (
 )
 
 func init() {
-	dataSource := "root:root@tcp(localhost:3306)/database_Go"
+
+	dataSource := fmt.Sprintf("root:1234@tcp(localhost:3306)/database_Go")
 	var err error
 	StorageDB, err = sql.Open("mysql", dataSource)
 	if err != nil {

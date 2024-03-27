@@ -1,8 +1,10 @@
 package domain
 
-type odontologo struct{
-	ID int
-	Nombre string
-	Apellido string
-	Matricula string
+type Odontologo struct{
+	ID int           `json:"id"`
+	Nombre string	`json:"nombre"`
+	Apellido string		`json:"apellido"`
+	Matricula string	`json:"matricula"`
 }
+
+     

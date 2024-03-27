@@ -2,6 +2,7 @@ package paciente
 
 import (
 	"database/sql"
+
 	"github.com/bautista00/Final_BackEnd_Go/internal/domain"
 )
 
