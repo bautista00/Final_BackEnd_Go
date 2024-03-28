@@ -2,6 +2,7 @@ package paciente
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/bautista00/Final_BackEnd_Go/internal/domain"
 )
@@ -18,6 +19,7 @@ type Repository interface {
 	GetAll() ([]domain.Paciente, error)
 	GetByID(id int) (domain.Paciente, error)
 	Create(paciente domain.Paciente) (domain.Paciente, error)
+	GetByDoc(doc string) (domain.Paciente, error)
 	Update(id int, paciente domain.Paciente) (domain.Paciente, error)
 	Delete(id int) error
 }
@@ -50,6 +52,23 @@ func (r *MySQLRepository) GetByID(id int) (domain.Paciente, error) {
 	}
 	return p, nil
 }
+
+
+func (r *MySQLRepository) GetByDoc(doc string) (domain.Paciente, error) {
+	query := "SELECT * FROM pacientes WHERE dni = ?"
+	row := r.db.QueryRow(query, doc)
+	var paciente domain.Paciente
+
+	err := row.Scan(&paciente.ID, &paciente.Nombre, &paciente.Apellido, &paciente.Domicilio, &paciente.DNI, &paciente.FechaAlta)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return domain.Paciente{}, fmt.Errorf("Paciente with DOC %s not found", doc)
+		}
+		return domain.Paciente{}, err
+	}
+	return paciente, nil
+}
+
 
 func (r *MySQLRepository) Create(paciente domain.Paciente) (domain.Paciente, error) {
 	result, err := r.db.Exec("INSERT INTO pacientes (nombre, apellido, domicilio, dni, fecha_alta) VALUES (?, ?, ?, ?, ?)",

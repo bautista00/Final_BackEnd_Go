@@ -2,6 +2,7 @@ package odontologo
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/bautista00/Final_BackEnd_Go/internal/domain"
 )
@@ -13,6 +14,7 @@ type MySQLRepository struct {
 type Repository interface {
 	GetAll() ([]domain.Odontologo, error)
 	GetByID(id int) (domain.Odontologo, error)
+    GetByMat(mat string) (domain.Odontologo, error)
 	Create(dentist domain.Odontologo) (domain.Odontologo, error)
 	Update(id int, dentist domain.Odontologo) (domain.Odontologo, error)
 	Delete(id int) error
@@ -54,6 +56,20 @@ func (r *MySQLRepository) GetByID(id int) (domain.Odontologo, error) {
     return o, nil
 }
 
+func (r *MySQLRepository) GetByMat(mat string) (domain.Odontologo, error) {
+	query := "SELECT * FROM odontologos WHERE matricula = ?"
+	row := r.db.QueryRow(query, mat)
+	var o domain.Odontologo
+
+	err := row.Scan(&o.ID, &o.Nombre, &o.Apellido, &o.Matricula)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return domain.Odontologo{}, fmt.Errorf("Odontologo with matricula %s not found", mat)
+		}
+		return domain.Odontologo{}, err
+	}
+	return o, nil
+}
 
 func (r *MySQLRepository) Create(dentist domain.Odontologo) (domain.Odontologo, error) {
     result, err := r.db.Exec("INSERT INTO odontologos (nombre, apellido, matricula) VALUES (?, ?, ?)",
